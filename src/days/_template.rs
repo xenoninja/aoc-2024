@@ -16,8 +16,16 @@
 use crate::common::{read_input, time_it};
 
 pub fn run(use_example: bool) {
-    let name = if use_example { "dayNN_example" } else { "dayNN" };
-    let input = read_input(name);
+    let day = std::path::Path::new(file!())
+        .file_stem()
+        .and_then(|stem| stem.to_str())
+        .expect("day source file should have a UTF-8 file stem");
+    let name = if use_example {
+        format!("{day}_example")
+    } else {
+        day.to_string()
+    };
+    let input = read_input(&name);
 
     // If parsing is shared between parts, do it once here:
     // let parsed = parse(&input);
