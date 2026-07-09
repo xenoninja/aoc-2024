@@ -5,17 +5,19 @@
 //   2. Put your real input at      data/dayNN.txt
 //      and the puzzle example at   data/dayNN_example.txt
 //   3. Register the module in src/days/mod.rs:   pub mod dayNN;
-//   4. Add a match arm in src/main.rs:           "dayNN" => days::dayNN::run(use_example),
-//   5. Run:   cargo run -- dayNN          (real input)
-//             cargo run -- dayNN example  (the small sample)
+//   4. Add a match arm in src/main.rs:           "dayNN" => days::dayNN::run(part, use_example),
+//   5. Run:   cargo run -- dayNN part1          (real input)
+//             cargo run -- dayNN part2
+//             cargo run -- dayNN all
+//             cargo run -- dayNN part1 example  (the small sample)
 //
 // Keep part1/part2 as pure functions of &str — no file I/O, no globals.
 // Read &mut state through local variables only. When both parts share
 // expensive parsing, parse once in run() and pass the parsed value to both.
 
-use crate::common::{read_input, time_it};
+use crate::common::{Part, read_input, time_it};
 
-pub fn run(use_example: bool) {
+pub fn run(part: Part, use_example: bool) {
     let day = std::path::Path::new(file!())
         .file_stem()
         .and_then(|stem| stem.to_str())
@@ -30,8 +32,14 @@ pub fn run(use_example: bool) {
     // If parsing is shared between parts, do it once here:
     // let parsed = parse(&input);
 
-    time_it("part 1", || part1(&input));
-    time_it("part 2", || part2(&input));
+    match part {
+        Part::Part1 => time_it("part 1", || part1(&input)),
+        Part::Part2 => time_it("part 2", || part2(&input)),
+        Part::All => {
+            time_it("part 1", || part1(&input));
+            time_it("part 2", || part2(&input));
+        }
+    }
 }
 
 /// Parse the raw input into whatever shape the puzzle needs.

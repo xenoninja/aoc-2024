@@ -1,6 +1,24 @@
 use std::fs;
 use std::time::Instant;
 
+#[derive(Clone, Copy)]
+pub enum Part {
+    Part1,
+    Part2,
+    All,
+}
+
+impl Part {
+    pub fn parse(value: &str) -> Option<Self> {
+        match value {
+            "part1" => Some(Self::Part1),
+            "part2" => Some(Self::Part2),
+            "all" => Some(Self::All),
+            _ => None,
+        }
+    }
+}
+
 /// Read a puzzle input file. `name` is like "day01" or "day01_example".
 /// Looks under `data/` relative to the crate root.
 pub fn read_input(name: &str) -> String {
