@@ -9,24 +9,27 @@ fn main() {
     let mut args = env::args().skip(1);
 
     let day = args.next().unwrap_or_else(|| usage());
-    let part_arg = args.next().unwrap_or_else(|| usage());
-    let part = Part::parse(&part_arg).unwrap_or_else(|| {
-        eprintln!("unknown part: {part_arg}");
-        usage();
-    });
+    let mut part = Part::All;
+    let mut use_example = false;
 
-    let use_example = match args.next() {
-        None => false,
-        Some(flag) if flag == "example" => true,
-        Some(flag) => {
-            eprintln!("unknown option: {flag}");
+    if let Some(arg) = args.next() {
+        if arg == "example" {
+            use_example = true;
+        } else if let Some(parsed) = Part::parse(&arg) {
+            part = parsed;
+        } else {
+            eprintln!("unknown part or option: {arg}");
             usage();
         }
-    };
+    }
 
-    if let Some(extra) = args.next() {
-        eprintln!("unexpected argument: {extra}");
-        usage();
+    if let Some(arg) = args.next() {
+        if arg == "example" && !use_example {
+            use_example = true;
+        } else {
+            eprintln!("unexpected argument: {arg}");
+            usage();
+        }
     }
 
     match day.as_str() {
@@ -37,10 +40,10 @@ fn main() {
 }
 
 fn usage() -> ! {
-    eprintln!("usage: cargo run -- <dayNN> <part1|part2|all> [example]");
+    eprintln!("usage: cargo run -- <dayNN> [part1|part2|all] [example]");
+    eprintln!("example: cargo run -- day01");
+    eprintln!("example: cargo run -- day01 example");
     eprintln!("example: cargo run -- day01 part1");
-    eprintln!("example: cargo run -- day01 part2");
-    eprintln!("example: cargo run -- day01 all");
     eprintln!("example: cargo run -- day01 part1 example");
     std::process::exit(1);
 }

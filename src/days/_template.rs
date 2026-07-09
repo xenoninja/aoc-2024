@@ -6,9 +6,10 @@
 //      and the puzzle example at   data/dayNN_example.txt
 //   3. Register the module in src/days/mod.rs:   pub mod dayNN;
 //   4. Add a match arm in src/main.rs:           "dayNN" => days::dayNN::run(part, use_example),
-//   5. Run:   cargo run -- dayNN part1          (real input)
+//   5. Run:   cargo run -- dayNN                (both parts, real input)
+//             cargo run -- dayNN example        (both parts, small sample)
+//             cargo run -- dayNN part1          (real input)
 //             cargo run -- dayNN part2
-//             cargo run -- dayNN all
 //             cargo run -- dayNN part1 example  (the small sample)
 //
 // Keep part1/part2 as pure functions of &str — no file I/O, no globals.
